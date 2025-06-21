@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
@@ -30,6 +31,18 @@ function App() {
       </p>
     </>
   )
+=======
+import React from 'react';
+import BattleScreen from './BattleScreen.tsx';
+
+function App() {
+  return (
+    <div>
+      <BattleScreen />
+    </div>
+  );
+>>>>>>> origin/develop
 }
 
-export default App
+export default App;
+
