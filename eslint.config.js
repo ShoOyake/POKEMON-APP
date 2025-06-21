@@ -23,8 +23,6 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
-      "no-undef": 'off', // Disable no-undef rule as globals are defined"
-      "no-unused-vars": "error", // Enable no-unused-vars rule
     },
   },
 )
