@@ -32,7 +32,6 @@ const BattleScreen: React.FC = () => {
   return (
     <div>
       <h2>バトル開始！</h2>
-      <h1>テスト中</h1>
       <div className="battle-screen">
         <div className="pokemon-area">
           <div>
