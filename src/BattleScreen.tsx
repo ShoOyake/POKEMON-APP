@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import './App.css';
-// import playerLogo from './assets/player.png'
-// import enemyLogo from './assets/enemy.png'
+import playerLogo from './assets/player.png'
+import enemyLogo from './assets/enemy.png'
+import testLogo from './assets/react.svg'
 
 type Pokemon = {
   name: string;
@@ -15,14 +16,14 @@ const BattleScreen: React.FC = () => {
     name: 'ポッチャマ',
     hp: 65,
     maxHp: 80,
-    image: 'C:\Users\potat\source\repos\POKEMON-APP\src\assets\player.png',
+    image: playerLogo,
   });
 
   const [enemy, setEnemy] = useState<Pokemon>({
     name: 'イワーク',
     hp: 100,
     maxHp: 100,
-    image: 'C:\Users\potat\source\repos\POKEMON-APP\src\assets\enemy.png',
+    image: enemyLogo,
   });
 
   const handleMoveClick = (move: string) => {
