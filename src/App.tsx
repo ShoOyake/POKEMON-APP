@@ -1,17 +1,13 @@
-// import { useState } from 'react'
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
-import './App.css'
+import React from 'react';
+import BattleScreen from './BattleScreen.tsx';
 
 function App() {
-  // const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>Hello Pkemon</div>
-      <div>Oyakeブランチです</div>
-    </>
-  )
+    <div>
+      <BattleScreen />
+    </div>
+  );
 }
 
-export default App
+export default App;
+
