@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import './App.css';
-// import playerLogo from './assets/player.png'
-// import enemyLogo from './assets/enemy.png'
+import playerLogo from './assets/player.png'
+import enemyLogo from './assets/enemy.png'
+
 
 type Pokemon = {
   name: string;
@@ -10,24 +11,98 @@ type Pokemon = {
   image: string;
 };
 
+// バトル画面コンポーネント
+// バトル画面の状態を管理し、ポケモンのバトルをシミュレートするコンポーネント
 const BattleScreen: React.FC = () => {
+  // プレイヤーポケモンの状態を管理
+  // プレイヤーポケモンの初期状態を設定
   const [player, setPlayer] = useState<Pokemon>({
     name: 'ポッチャマ',
-    hp: 65,
+    hp: 80,
     maxHp: 80,
-    image: 'C:\Users\potat\source\repos\POKEMON-APP\src\assets\player.png',
+    image: playerLogo,
   });
 
+  // 敵ポケモンの状態を管理
+  // 敵ポケモンの初期状態を設定
   const [enemy, setEnemy] = useState<Pokemon>({
     name: 'イワーク',
     hp: 100,
     maxHp: 100,
-    image: 'C:\Users\potat\source\repos\POKEMON-APP\src\assets\enemy.png',
+    image: enemyLogo,
   });
 
-  const handleMoveClick = (move: string) => {
-    alert(`${player.name} の ${move}！`);
-  };
+  // バトルログ
+  // ログの状態を管理
+  const [logs, setLogs] = useState<string[]>([]);
+
+  // バトル終了フラグ
+  // バトルが終了したかどうかを管理
+  const [isBattleOver, setIsBattleOver] = useState(false);
+
+  // プレイヤーのターンかどうかを管理
+  // プレイヤーのターンを管理するための状態
+  const [isPlayerTurn, setIsPlayerTurn] = useState(true); // 最初はプレイヤーのターン
+
+
+
+  // ポケモンの技を使用したときの処理
+  // 技を使用したときのダメージ計算とログの更新
+const handleMoveClick = (move: string) => {
+  if (isBattleOver) return; // 終了後は何もしない 
+
+  const damage = Math.floor(Math.random() * 20) + 5; // 5〜24ダメージ
+  const newHp = Math.max(enemy.hp - damage, 0); // 最低0まで
+
+  setEnemy({ ...enemy, hp: newHp });
+
+  const log = `${player.name} の ${move}！ ${enemy.name} に ${damage} ダメージ！`;
+  setLogs(prev => [log, ...prev]);
+
+  if (newHp <= 0) {
+    setLogs(prev => [`${enemy.name} をたおした！🎉`, ...prev]);
+    setIsBattleOver(true); // バトル終了！(ボタン押せなくする)
+  }
+
+  setIsPlayerTurn(false); // 敵のターンへ移行
+
+  setTimeout(() => {
+    const enemyDamage = Math.floor(Math.random() * 15) + 5;
+    const newPlayerHp = Math.max(player.hp - enemyDamage, 0);
+    setPlayer({ ...player, hp: newPlayerHp });
+
+    const enemyLog = `${enemy.name} の たいあたり！ ${player.name} に ${enemyDamage} ダメージ！`;
+    setLogs((prev) => [enemyLog, ...prev]);
+
+    if (newPlayerHp <= 0) {
+      setLogs((prev) => [`${player.name} は たおれた…😵`, ...prev]);
+      setIsBattleOver(true);
+    } else {
+      setIsPlayerTurn(true); // プレイヤーのターンに戻す
+    }
+  }, 1000); // 敵の反撃に少し演出時間を与える
+};
+
+// バトルをリセットする処理
+const handleReset = () => {
+  setPlayer({
+    name: 'ポッチャマ',
+    hp: 80,
+    maxHp: 80,
+    image: playerLogo,
+  });
+
+  setEnemy({
+    name: 'イワーク',
+    hp: 100,
+    maxHp: 100,
+    image: enemyLogo,
+  });
+
+  setLogs([]);
+  setIsBattleOver(false);
+};
+
 
   return (
     <div>
@@ -48,6 +123,21 @@ const BattleScreen: React.FC = () => {
             <button key={move} onClick={() => handleMoveClick(move)}>{move}</button>
           ))}
         </div>
+
+        {/* バトルが終了した場合のメッセージとリセットボタン */}
+        {isBattleOver && (
+          <button onClick={handleReset}>リセット</button>
+        )}
+
+        <div className="battle-log">
+          <h3>バトルログ</h3>
+          <ul>
+            {logs.map((log, index) => (
+              <li key={index}>{log}</li>
+            ))}
+          </ul>
+        </div>
+
       </div>
     </div>
   );

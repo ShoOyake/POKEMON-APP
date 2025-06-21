@@ -28,3 +28,19 @@
   gap: 1rem;
   flex-wrap: wrap;
 }
+
+.battle-log {
+  max-height: 200px;
+  overflow-y: auto;
+  background: #f9f9f9;
+  padding: 1rem;
+  margin-top: 1rem;
+  border-radius: 8px;
+}
+
+button {
+  padding: 8px 16px;
+  margin-top: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
