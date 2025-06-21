@@ -9,7 +9,7 @@ function App() {
   return (
     <>
       <div>Hello Pkemon</div>
-      <div>Developブランチです</div>
+      <div>Oyakeブランチです</div>
     </>
   )
 }
