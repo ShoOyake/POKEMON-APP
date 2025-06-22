@@ -21,7 +21,7 @@ const BattleScreen: React.FC = () => {
     name: 'ポッチャマ',
     hp: 80,
     maxHp: 80,
-    attack: 20,
+    attack: 5,
     image: playerLogo,
   });
 
@@ -31,7 +31,7 @@ const BattleScreen: React.FC = () => {
     name: 'イワーク',
     hp: 100,
     maxHp: 100,
-    attack: 20,
+    attack: 10,
     image: enemyLogo,
   });
 
@@ -87,7 +87,6 @@ const handleMoveClick = (move: string) => {
     return;
   }
 
-  // 通常攻撃の処理（省略せず残しておく）
 
   
   const [min, max] = moveDamageMap[move] ||[5, 15]; // 万が一未定義でも動くように
@@ -106,7 +105,9 @@ const handleMoveClick = (move: string) => {
   setIsPlayerTurn(false); // 敵のターンへ移行
 
   setTimeout(() => {
-    const enemyDamage = Math.floor(Math.random() * 15) + 5;
+     
+     if (newHp <= 0) return; // バトル終了後なら処理スキップ 
+    const enemyDamage = Math.floor(Math.random() * 15) + enemy.attack;
     const newPlayerHp = Math.max(player.hp - enemyDamage, 0);
     setPlayer({ ...player, hp: newPlayerHp });
 
@@ -153,7 +154,7 @@ const handleReset = () => {
           <div>
             <img src={player.image} alt={player.name} />
             <div>{player.name} HP {player.hp}/{player.maxHp}</div>
-          </div> */
+          </div> 
           <div>
             <img src={enemy.image} alt={enemy.name} />
             <div>{enemy.name} HP {enemy.hp}/{enemy.maxHp}</div>
