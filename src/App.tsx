@@ -35,8 +35,8 @@ function App() {
         setIsBattleOver={setIsBattleOver}
         isPlayerTurn={isPlayerTurn}
         setIsPlayerTurn={setIsPlayerTurn}
-        initialPlayer={pocchama}
-        initialEnemy={iwark}
+        initialPlayer={pocchama} // リセット用の初期値
+        initialEnemy={iwark}　// リセット用の初期値
       />
     </div>
   );
