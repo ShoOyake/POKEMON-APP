@@ -1,51 +1,32 @@
-import React, { useState } from 'react';
-import './App.css';
-import playerLogo from './assets/player.png'
-import enemyLogo from './assets/enemy.png'
+import '../style/App.css';
+import { Pokemon } from '../types'; 
 
-
-type Pokemon = {
-  name: string;
-  hp: number;
-  maxHp: number;
-  attack: number;
-  image: string;
-};
+interface Props {
+  player: Pokemon;
+  setPlayer: React.Dispatch<React.SetStateAction<Pokemon>>;
+  enemy: Pokemon;
+  setEnemy: React.Dispatch<React.SetStateAction<Pokemon>>;
+  logs: string[];
+  setLogs: React.Dispatch<React.SetStateAction<string[]>>;
+  isBattleOver: boolean;
+  setIsBattleOver: React.Dispatch<React.SetStateAction<boolean>>;
+  isPlayerTurn: boolean;
+  setIsPlayerTurn: React.Dispatch<React.SetStateAction<boolean>>;
+  initialPlayer: Pokemon; // 初期ポケモン
+  initialEnemy: Pokemon; // 初期敵ポケモン
+}
 
 // バトル画面コンポーネント
 // バトル画面の状態を管理し、ポケモンのバトルをシミュレートするコンポーネント
-const BattleScreen: React.FC = () => {
-  // プレイヤーポケモンの状態を管理
-  // プレイヤーポケモンの初期状態を設定
-  const [player, setPlayer] = useState<Pokemon>({
-    name: 'ポッチャマ',
-    hp: 80,
-    maxHp: 80,
-    attack: 5,
-    image: playerLogo,
-  });
-
-  // 敵ポケモンの状態を管理
-  // 敵ポケモンの初期状態を設定
-  const [enemy, setEnemy] = useState<Pokemon>({
-    name: 'イワーク',
-    hp: 100,
-    maxHp: 100,
-    attack: 10,
-    image: enemyLogo,
-  });
-
-  // バトルログ
-  // ログの状態を管理
-  const [logs, setLogs] = useState<string[]>([]);
-
-  // バトル終了フラグ
-  // バトルが終了したかどうかを管理
-  const [isBattleOver, setIsBattleOver] = useState(false);
-
-  // プレイヤーのターンかどうかを管理
-  // プレイヤーのターンを管理するための状態
-  const [isPlayerTurn, setIsPlayerTurn] = useState(true); // 最初はプレイヤーのターン
+function BattleScreen({
+  player, setPlayer,
+  enemy, setEnemy,
+  logs, setLogs,
+  isBattleOver, setIsBattleOver,
+  isPlayerTurn, setIsPlayerTurn,
+  initialPlayer,
+  initialEnemy,
+}: Props){
 
   //技ごとのダメージ乱数
 const moveDamageMap: { [key: string]: [number, number] } = {
@@ -54,7 +35,6 @@ const moveDamageMap: { [key: string]: [number, number] } = {
   'たいあたり': [5, 15],
   'アクアジェット': [15, 25],
 };
-
 
   // ポケモンの技を使用したときの処理
   // 技を使用したときのダメージ計算とログの更新
@@ -89,15 +69,15 @@ const handleMoveClick = (move: string) => {
 
 
   
-  const [min, max] = moveDamageMap[move] ||[5, 15]; // 万が一未定義でも動くように
+  const [min, max] = moveDamageMap[move];
   const damage = Math.floor(Math.random() * (max - min + 1)) + min;
-  const newHp = Math.max(enemy.hp - damage, 0); // 最低0まで
+  const newEnemyHp = Math.max(enemy.hp - damage, 0); // 最低0まで
 
-  setEnemy({ ...enemy, hp: newHp });
+  setEnemy({ ...enemy, hp: newEnemyHp });
   const log = `${player.name} の ${move}！ ${enemy.name} に ${damage} ダメージ！`;
   setLogs(prev => [log, ...prev]);
 
-  if (newHp <= 0) {
+  if (newEnemyHp <= 0) {
     setLogs(prev => [`${enemy.name} をたおした！🎉`, ...prev]);
     setIsBattleOver(true); // バトル終了！(ボタン押せなくする)
   }
@@ -105,8 +85,7 @@ const handleMoveClick = (move: string) => {
   setIsPlayerTurn(false); // 敵のターンへ移行
 
   setTimeout(() => {
-     
-     if (newHp <= 0) return; // バトル終了後なら処理スキップ 
+     if (newEnemyHp <= 0) return; // バトル終了後なら処理スキップ 
     const enemyDamage = Math.floor(Math.random() * 15) + enemy.attack;
     const newPlayerHp = Math.max(player.hp - enemyDamage, 0);
     setPlayer({ ...player, hp: newPlayerHp });
@@ -126,24 +105,11 @@ const handleMoveClick = (move: string) => {
 
 // バトルをリセットする処理
 const handleReset = () => {
-  setPlayer({
-    name: 'ポッチャマ',
-    hp: 80,
-    maxHp: 80,
-    attack:20,
-    image: playerLogo,
-  });
-
-  setEnemy({
-    name: 'イワーク',
-    hp: 100,
-    maxHp: 100,
-    attack:15,
-    image: enemyLogo,
-  });
-
+  setPlayer(initialPlayer);
+  setEnemy(initialEnemy);
   setLogs([]);
   setIsBattleOver(false);
+  setIsPlayerTurn(true);
 };
 
   return (
