@@ -4,7 +4,10 @@ import PokemonStatus from '../components/PokemonStatus';
 import MoveButtons from '../components/MoveButtons';
 import BattleLog from '../components/BattleLog';
 import { moves } from '../data/moves';
+import { useBattleLogic } from '../hooks/useBattleLogic';
 
+// Propsの型定義
+// バトル画面に渡すプロパティの型を定義する
 interface Props {
   player: Pokemon;
   setPlayer: React.Dispatch<React.SetStateAction<Pokemon>>;
@@ -21,7 +24,6 @@ interface Props {
 }
 
 // バトル画面コンポーネント
-// バトル画面の状態を管理し、ポケモンのバトルをシミュレートするコンポーネント
 function BattleScreen({
   player, setPlayer,
   enemy, setEnemy,
@@ -32,49 +34,28 @@ function BattleScreen({
   initialEnemy,
 }: Props){
 
-// ポケモンの技を選択したときの処理
-// プレイヤーが技を選択したときの処理
+  // バトルロジックをフックから取得
+  // useBattleLogicフックを使用して、バトルのロジックを取得する
+  // このフックは、プレイヤーと敵のポケモン、状態管理用の関数を引数に取り、バトルのロジックを提供する
+  // handlePlayerMove関数を取得し、プレイヤーの技を使用する 
+  const { handlePlayerMove } = useBattleLogic({
+    player, enemy, setPlayer, setEnemy, setLogs, setIsBattleOver, setIsPlayerTurn,
+  });
+
+// プレイヤーの技を選択したときの処理
+// プレイヤーが技を選択したときに呼び出される関数
+// 技の名前を引数に取り、バトルのロジックを実行する
+// バトルが終了している場合や、プレイヤーのターンでない場合は何もしない
+// 技が存在しない場合も何もしない 
 const handleMoveClick = (moveName: string) => {
-  if (isBattleOver || !isPlayerTurn) return; // バトルが終了しているorプレイヤーターンでない場合は何もしない
-
+  if (isBattleOver || !isPlayerTurn) return;
+  
   const selectedMove = moves.find(m => m.name === moveName);
-  if (!selectedMove) return; //undefinedチェック(undefinedの状態では使用不可)
+  if (!selectedMove) return;
 
-  if (selectedMove.attribute === 'デバフ') {
-    const newAttack = Math.max(enemy.attack - 5, 1);
-    setEnemy({ ...enemy, attack: newAttack });
-    setLogs(prev => [`${player.name} の ${selectedMove.name}！${enemy.name} の こうげきが さがった！`, ...prev]);
-  }
-
-  const damage = Math.floor(Math.random() * (selectedMove.maxDamage - selectedMove.minDamage + 1)) + selectedMove.minDamage;
-  if (damage > 0) {
-    const newEnemyHp = Math.max(enemy.hp - damage, 0);
-    setEnemy({ ...enemy, hp: newEnemyHp });
-    setLogs(prev => [`${player.name} の ${selectedMove.name}！ ${enemy.name} に ${damage} ダメージ！`, ...prev]);
-
-    if (newEnemyHp <= 0) {
-      setLogs(prev => [`${enemy.name} をたおした！🎉`, ...prev]);
-      setIsBattleOver(true);
-      return;
-    }
-  }
-
-  setIsPlayerTurn(false);
-
-  setTimeout(() => {
-    const enemyDamage = Math.floor(Math.random() * 15) + enemy.attack;
-    const newPlayerHp = Math.max(player.hp - enemyDamage, 0);
-    setPlayer({ ...player, hp: newPlayerHp });
-    setLogs(prev => [`${enemy.name} の たいあたり！ ${player.name} に ${enemyDamage} ダメージ！`, ...prev]);
-
-    if (newPlayerHp <= 0) {
-      setLogs(prev => [`${player.name} は たおれた…😵`, ...prev]);
-      setIsBattleOver(true);
-    } else {
-      setIsPlayerTurn(true);
-    }
-  }, 1000);
+  handlePlayerMove(selectedMove);
 };
+
 
 // バトルをリセットする処理
 const handleReset = () => {
@@ -85,6 +66,9 @@ const handleReset = () => {
   setIsPlayerTurn(true);
 };
 
+
+ // バトル画面のレンダリング
+ // バトル画面のコンポーネントを返す  
   return (
     <div>
       <h2>バトル開始！</h2>
