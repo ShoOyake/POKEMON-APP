@@ -1,3 +1,4 @@
+// File: src/pages/BattleScreen.tsx
 import '../style/App.css';
 import { Pokemon } from '../types';
 import PokemonStatus from '../components/PokemonStatus';
