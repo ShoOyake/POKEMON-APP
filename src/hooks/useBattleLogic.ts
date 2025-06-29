@@ -1,9 +1,11 @@
-// hooks/useBattleLogic.ts
+// file: src/hooks/useBattleLogic.ts
 import { useCallback } from 'react';
 import { Pokemon, Move } from '../types';
 import { calculateDamage } from '../utils/calculateDamage';
 import { applyAttackDebuff } from '../utils/applyDebuff';
 
+// バトルロジックのパラメータ型定義
+// バトルの状態を管理するためのパラメータを定義する
 interface BattleLogicParams {
   player: Pokemon;
   enemy: Pokemon;
@@ -14,6 +16,8 @@ interface BattleLogicParams {
   setIsPlayerTurn: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+// バトルロジックフック
+// バトルのロジックを管理するフック
 export const useBattleLogic = ({
   player,
   enemy,
@@ -40,7 +44,7 @@ export const useBattleLogic = ({
     }
   }, [enemy, player, setPlayer, setLogs, setIsBattleOver, setIsPlayerTurn]);
 
-  
+
   // プレイヤーターン
   const handlePlayerMove = useCallback((move: Move) => {
     if (move.attribute === 'デバフ') {
@@ -70,5 +74,7 @@ export const useBattleLogic = ({
     }, 1000);
   }, [enemy, player, setEnemy, setLogs, setIsBattleOver, setIsPlayerTurn, handleEnemyTurn]);
 
+  // バトルロジックを返す
+  // プレイヤーの技を使用するための関数を返す
   return { handlePlayerMove };
 };
