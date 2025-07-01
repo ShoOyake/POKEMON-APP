@@ -8,7 +8,6 @@ type Pokemon = {
   name: string;
   hp: number;
   maxHp: number;
-  attack: number;
   image: string;
 };
 
@@ -21,7 +20,6 @@ const BattleScreen: React.FC = () => {
     name: 'ポッチャマ',
     hp: 80,
     maxHp: 80,
-    attack: 5,
     image: playerLogo,
   });
 
@@ -31,7 +29,6 @@ const BattleScreen: React.FC = () => {
     name: 'イワーク',
     hp: 100,
     maxHp: 100,
-    attack: 10,
     image: enemyLogo,
   });
 
@@ -47,13 +44,6 @@ const BattleScreen: React.FC = () => {
   // プレイヤーのターンを管理するための状態
   const [isPlayerTurn, setIsPlayerTurn] = useState(true); // 最初はプレイヤーのターン
 
-  //技ごとのダメージ乱数
-const moveDamageMap: { [key: string]: [number, number] } = {
-  'みずでっぽう': [10, 20],
-  'なきごえ': [0, 5],
-  'たいあたり': [5, 15],
-  'アクアジェット': [15, 25],
-};
 
 
   // ポケモンの技を使用したときの処理
@@ -61,39 +51,11 @@ const moveDamageMap: { [key: string]: [number, number] } = {
 const handleMoveClick = (move: string) => {
   if (isBattleOver) return; // 終了後は何もしない 
 
-  if (move === 'なきごえ') {
-    const newAttack = Math.max(enemy.attack - 5, 1); // 最低1まで
-    setEnemy({ ...enemy, attack: newAttack });
-    setLogs(prev => [`${player.name} の ${move}！ ${enemy.name} の こうげきが さがった！`, ...prev]);
-    setIsPlayerTurn(false);
-
-    // 敵の反撃
-    setTimeout(() => {
-      const enemyDamage = Math.floor(Math.random() * 5) + enemy.attack;
-      const newPlayerHp = Math.max(player.hp - enemyDamage, 0);
-      setPlayer({ ...player, hp: newPlayerHp });
-
-      const enemyLog = `${enemy.name} の たいあたり！ ${player.name} に ${enemyDamage} ダメージ！`;
-      setLogs((prev) => [enemyLog, ...prev]);
-
-      if (newPlayerHp <= 0) {
-        setLogs((prev) => [`${player.name} は たおれた…😵`, ...prev]);
-        setIsBattleOver(true);
-      } else {
-        setIsPlayerTurn(true);
-      }
-    }, 1000);
-
-    return;
-  }
-
-
-  
-  const [min, max] = moveDamageMap[move] ||[5, 15]; // 万が一未定義でも動くように
-  const damage = Math.floor(Math.random() * (max - min + 1)) + min;
+  const damage = Math.floor(Math.random() * 20) + 5; // 5〜24ダメージ
   const newHp = Math.max(enemy.hp - damage, 0); // 最低0まで
 
   setEnemy({ ...enemy, hp: newHp });
+
   const log = `${player.name} の ${move}！ ${enemy.name} に ${damage} ダメージ！`;
   setLogs(prev => [log, ...prev]);
 
@@ -105,9 +67,7 @@ const handleMoveClick = (move: string) => {
   setIsPlayerTurn(false); // 敵のターンへ移行
 
   setTimeout(() => {
-     
-     if (newHp <= 0) return; // バトル終了後なら処理スキップ 
-    const enemyDamage = Math.floor(Math.random() * 15) + enemy.attack;
+    const enemyDamage = Math.floor(Math.random() * 15) + 5;
     const newPlayerHp = Math.max(player.hp - enemyDamage, 0);
     setPlayer({ ...player, hp: newPlayerHp });
 
@@ -123,14 +83,12 @@ const handleMoveClick = (move: string) => {
   }, 1000); // 敵の反撃に少し演出時間を与える
 };
 
-
 // バトルをリセットする処理
 const handleReset = () => {
   setPlayer({
     name: 'ポッチャマ',
     hp: 80,
     maxHp: 80,
-    attack:20,
     image: playerLogo,
   });
 
@@ -138,7 +96,6 @@ const handleReset = () => {
     name: 'イワーク',
     hp: 100,
     maxHp: 100,
-    attack:15,
     image: enemyLogo,
   });
 
@@ -146,15 +103,16 @@ const handleReset = () => {
   setIsBattleOver(false);
 };
 
+
   return (
     <div>
       <h2>バトル開始！</h2>
       <div className="battle-screen">
-         <div className="pokemon-area">
+        <div className="pokemon-area">
           <div>
             <img src={player.image} alt={player.name} />
             <div>{player.name} HP {player.hp}/{player.maxHp}</div>
-          </div> 
+          </div>
           <div>
             <img src={enemy.image} alt={enemy.name} />
             <div>{enemy.name} HP {enemy.hp}/{enemy.maxHp}</div>
@@ -184,6 +142,7 @@ const handleReset = () => {
     </div>
   );
 };
+
 export default BattleScreen;
 
 
