@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
+import './ShakeSlide.css';
 import playerLogo from './assets/player.png'
 import enemyLogo from './assets/enemy.png'
 
@@ -53,11 +54,21 @@ const handleMoveClick = (move: string) => {
 
   const damage = Math.floor(Math.random() * 20) + 5; // 5〜24ダメージ
   const newHp = Math.max(enemy.hp - damage, 0); // 最低0まで
+  
 
   setEnemy({ ...enemy, hp: newHp });
 
   const log = `${player.name} の ${move}！ ${enemy.name} に ${damage} ダメージ！`;
   setLogs(prev => [log, ...prev]);
+
+  const [isDamaged, setIsDamaged] = useState(false);
+  const handleDamage = () => {
+    setIsDamaged(true);
+
+    // アニメーションを再発動できるように少ししてから戻す
+    setTimeout(() => {
+      setIsDamaged(false);
+    }, 1000); //
 
   if (newHp <= 0) {
     setLogs(prev => [`${enemy.name} をたおした！🎉`, ...prev]);
@@ -123,6 +134,16 @@ const handleReset = () => {
             <button key={move} onClick={() => handleMoveClick(move)}>{move}</button>
           ))}
         </div>
+        <div>
+      <img
+        src="./assets/player.png"
+        alt="player"
+        width="200"
+        className={isDamaged ? 'shake' : ''}
+      />
+      <button onClick={handleDamage}>敵にダメージ！</button>
+    </div>
+
 
         {/* バトルが終了した場合のメッセージとリセットボタン */}
         {isBattleOver && (

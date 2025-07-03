@@ -48,3 +48,15 @@ export default tseslint.config({
   },
 })
 ```
+
+----------初心者向けメモ-----------
+
+...　スプレッド構文
+以下、例
+const player = { name: "勇者", hp: 50, mp: 30 };
+
+このコード：
+setPlayer({ ...player, hp: 20 });
+は以下と同じ意味：
+setPlayer({ name: "勇者", hp: 20, mp: 30 });
+つまり、player の中身をコピーしつつ、hp だけを 20 にするイメージ。
