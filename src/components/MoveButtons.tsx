@@ -1,3 +1,4 @@
+// File: src/components/MoveButtons.tsx
 import { Move } from '../types'; 
 
 interface MoveButtonsProps {

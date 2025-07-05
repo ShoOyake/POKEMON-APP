@@ -1,3 +1,4 @@
+// File: src/components/PokemonStatus.tsx
 import { Pokemon } from '../types'; 
 
 interface PokemonStatusProps {

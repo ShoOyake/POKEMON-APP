@@ -1,3 +1,4 @@
+//file: src/App.tsx
 import { useState } from 'react';
 import BattleScreen from './pages/BattleScreen.tsx';
 import { pocchama, iwark } from './data/pokemon.ts';
