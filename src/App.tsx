@@ -22,6 +22,11 @@ function App() {
   // プレイヤーのターンかどうか
   // プレイヤーのターンかどうかを管理
   const [isPlayerTurn, setIsPlayerTurn] = useState(true);
+  // プレイヤーのポケモンが揺れているかどうか
+  // ポケモンがダメージを受けたときに揺れるかどうかを管理
+  // これはアニメーションのための状態で、ポケモンがダメージを受けたときに揺れるようにする
+  // useStateフックを使用して、初期値はfalseに設定
+  const [isPlayerShaking, setIsPlayerShaking] = useState(false); 
 
   return (
     <div>
@@ -38,6 +43,8 @@ function App() {
         setIsPlayerTurn={setIsPlayerTurn}
         initialPlayer={pocchama} // リセット用の初期値
         initialEnemy={iwark}　// リセット用の初期値
+        isPlayerShaking={isPlayerShaking} // ポケモンの揺れ状態を管理するためのprops
+        setIsPlayerShaking={setIsPlayerShaking} // ポケモンの揺れ状態を管理する関数
       />
     </div>
   );
