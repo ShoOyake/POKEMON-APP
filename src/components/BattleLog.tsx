@@ -1,3 +1,4 @@
+// File: src/components/BattleLog.tsx
 interface BattleLogProps {
   logs: string[];
 }
