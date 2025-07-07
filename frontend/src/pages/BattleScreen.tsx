@@ -57,10 +57,10 @@ const handleMoveClick = (moveName: string) => {
   const selectedMove = moves.find(m => m.name === moveName);
   if (!selectedMove) return;
 
-  // 揺れ開始！
+  // 揺れ開始
   setIsPlayerShaking(true);
   // 一定時間後に揺れ終了（アニメーションの長さと合わせる）
-  setTimeout(() => setIsPlayerShaking(false), 1000);
+  setTimeout(() => setIsPlayerShaking(false), 400);
   handlePlayerMove(selectedMove);
 };
 
