@@ -22,6 +22,8 @@ interface Props {
   setIsPlayerTurn: React.Dispatch<React.SetStateAction<boolean>>;
   initialPlayer: Pokemon; // 初期ポケモン
   initialEnemy: Pokemon; // 初期敵ポケモン
+  isPlayerShaking: boolean; // ポケモンの揺れ状態（オプション）
+  setIsPlayerShaking: React.Dispatch<React.SetStateAction<boolean>>; 
 }
 
 // バトル画面コンポーネント
@@ -33,6 +35,7 @@ function BattleScreen({
   isPlayerTurn, setIsPlayerTurn,
   initialPlayer,
   initialEnemy,
+  isPlayerShaking, setIsPlayerShaking,
 }: Props){
 
   // バトルロジックをフックから取得
@@ -54,6 +57,10 @@ const handleMoveClick = (moveName: string) => {
   const selectedMove = moves.find(m => m.name === moveName);
   if (!selectedMove) return;
 
+  // 揺れ開始
+  setIsPlayerShaking(true);
+  // 一定時間後に揺れ終了（アニメーションの長さと合わせる）
+  setTimeout(() => setIsPlayerShaking(false), 400);
   handlePlayerMove(selectedMove);
 };
 
@@ -76,10 +83,13 @@ const handleReset = () => {
 
       <div className="battle-screen">
         <div className="pokemon-area">
-          <PokemonStatus pokemon={player} />
-          <PokemonStatus pokemon={enemy} />
+          <PokemonStatus pokemon={player} isShaking={isPlayerShaking} />
+          <PokemonStatus pokemon={enemy} isShaking={false} />
         </div>
 
+        {/* プレイヤーが使用可能な技のボタンを表示するコンポーネント */}
+        {/* MoveButtonsコンポーネントに技のリストとクリックイベントハンドラを渡す */}
+        {/* プレイヤーの技を選択するためのボタンを表示 */}  
         <div className="move-buttons">
           <MoveButtons moves={moves} onMoveClick={handleMoveClick} />
         </div>

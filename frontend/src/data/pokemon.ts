@@ -1,3 +1,4 @@
+// File: src/data/pokemon.ts
 import { Pokemon } from '../types'
 import pocchamaLogo from '../assets/pocchama.png'
 import iwarkLogo from '../assets/iwark.png'
