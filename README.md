@@ -51,7 +51,7 @@ export default tseslint.config({
 
 ----------初心者向けメモ-----------
 
-...　スプレッド構文
+1⃣スプレッド構文　...
 以下、例
 const player = { name: "勇者", hp: 50, mp: 30 };
 
@@ -60,3 +60,24 @@ setPlayer({ ...player, hp: 20 });
 は以下と同じ意味：
 setPlayer({ name: "勇者", hp: 20, mp: 30 });
 つまり、player の中身をコピーしつつ、hp だけを 20 にするイメージ。
+
+
+2⃣ローカル実行
+frontend :
+npm run dev
+
+backend :
+ 仮想環境の作成
+ python -m venv 仮想環境名
+ 仮想環境の有効化
+ Windows: 仮想環境名\Scripts\activate
+ macOS/Linux: source 仮想環境名/bin/activate
+
+ 必要なパッケージのインストール
+ fastapiフレームワークのインストール
+ pip install fastapi
+ ローカル実行用のuvicornサーバーのインストール
+ pip install uvicorn
+
+ サーバーの起動　main.pyのappインスタンス指定。デコレータで変更の度に自動更新
+ uvicorn main:app --reload
